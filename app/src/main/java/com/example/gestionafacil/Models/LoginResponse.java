@@ -1,0 +1,40 @@
+package com.example.gestionafacil.Models;
+import com.google.gson.annotations.SerializedName;
+
+public class LoginResponse {
+    @SerializedName("response")
+    private ResponseData response;
+
+    public ResponseData getResponse() {
+        return response;
+    }
+
+    public void setResponse(ResponseData response) {
+        this.response = response;
+    }
+
+    public boolean isSuccess() {
+        return response != null && response.isSuccess();
+    }
+
+    public String getMessage() {
+        return response != null ? response.getMessage() : null;
+    }
+
+    public class ResponseData {
+        @SerializedName("success")
+        private boolean success;
+
+        @SerializedName("message")
+        private String message;
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
+}
