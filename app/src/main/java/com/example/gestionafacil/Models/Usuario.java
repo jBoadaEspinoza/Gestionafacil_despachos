@@ -6,7 +6,7 @@ public class Usuario {
     private String nombre;
     private Persona persona;
     private Rol rol;
-    private String Token;
+
 
 
 

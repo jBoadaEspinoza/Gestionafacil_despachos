@@ -2,6 +2,7 @@ package com.example.gestionafacil.Controllers;
 import com.example.gestionafacil.Models.LoginData;
 import com.example.gestionafacil.Models.LoginResponse;
 
+import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.services.RetrofitClient;
 import com.example.gestionafacil.services.UserService;
 
@@ -9,11 +10,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.content.Context;
+
 public class UsuarioController {
     private UserService userService;
+    private SesionUsuario sessionManager;
 
-    public UsuarioController() {
+    public UsuarioController(Context context) {
         this.userService = RetrofitClient.getClient().create(UserService.class);
+        this.sessionManager = new SesionUsuario(context);
 
     }
 
@@ -29,6 +34,8 @@ public class UsuarioController {
                     if (loginResponse != null && loginResponse.getResponse() != null) {
                         boolean success = loginResponse.getResponse().isSuccess();
                         if (success) {
+                            String token = loginResponse.getResponse().getToken();
+                            sessionManager.saveToken(token); // Guardar el token en SharedPreferences
                             listener.onSuccess();
                         } else {
                             String errorMessage = loginResponse.getResponse().getMessage();

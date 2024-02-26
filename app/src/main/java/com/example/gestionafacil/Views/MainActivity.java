@@ -1,4 +1,4 @@
-package com.example.gestionafacil.Activities;
+package com.example.gestionafacil.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 

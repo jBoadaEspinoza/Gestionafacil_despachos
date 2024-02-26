@@ -1,4 +1,4 @@
-package com.example.gestionafacil.Fragments;
+package com.example.gestionafacil.Views.Fragments;
 
 import android.os.Bundle;
 

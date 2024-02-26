@@ -28,12 +28,47 @@ public class LoginResponse {
         @SerializedName("message")
         private String message;
 
+        @SerializedName("data")
+        private Data data;
+
+
+        @SerializedName("token")
+        private String token;
+
         public boolean isSuccess() {
             return success;
         }
 
         public String getMessage() {
             return message;
+        }
+
+        public Data getData() {
+            return data;
+        }
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
+    }
+
+    public class Data {
+        @SerializedName("establecimiento")
+        private Establecimiento establecimiento;
+
+        @SerializedName("usuario")
+        private Usuario usuario;
+
+        public Establecimiento getEstablecimiento() {
+            return establecimiento;
+        }
+
+        public Usuario getUsuario() {
+            return usuario;
         }
     }
 

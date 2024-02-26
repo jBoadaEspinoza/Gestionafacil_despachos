@@ -1,4 +1,4 @@
-package com.example.gestionafacil.Activities;
+package com.example.gestionafacil.Views.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,14 +12,17 @@ import android.widget.Toast;
 import com.example.gestionafacil.Controllers.UsuarioController;
 import com.example.gestionafacil.Controllers.UsuarioController.OnLoginListener;
 
+import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.Models.Usuario;
 import com.example.gestionafacil.R;
+import com.example.gestionafacil.Views.MainActivity;
 
 
 public class LoginActivity extends AppCompatActivity {
     private EditText editTextRuc, editTextUsuario, editTextClave;
     private Button buttonLogin;
     private UsuarioController usuarioController;
+    private SesionUsuario sesionUsuario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +35,8 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin = findViewById(R.id.buttonLogin);
 
         // Inicializar UsuarioController
-        usuarioController = new UsuarioController();
+        usuarioController = new UsuarioController(this);
+        sesionUsuario = new SesionUsuario(this); // Pasar el contexto de la actividad
 
         // Escuchar clics en el botón de inicio de sesión
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +51,9 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess() {
                         // Inicio de sesión exitoso, mostrar un mensaje de éxito
-                        Toast.makeText(LoginActivity.this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+                        String token = sesionUsuario.getToken();
+
+                        Toast.makeText(LoginActivity.this, "Token: " + token, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
@@ -63,16 +69,5 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void handleSuccessfulLogin(Usuario user) {
-        // Inicio de sesión exitoso, manejar la respuesta
-        Toast.makeText(LoginActivity.this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
-        // Aquí puedes navegar a la siguiente actividad, por ejemplo:
-        // Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        // startActivity(intent);
-    }
 
-    private void showError(String errorMessage) {
-        // Error en el inicio de sesión, mostrar mensaje de error
-        Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-    }
 }
