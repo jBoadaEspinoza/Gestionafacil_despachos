@@ -2,65 +2,72 @@ package com.example.gestionafacil.Views.Fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+import android.content.Context;
 
+import androidx.annotation.Nullable;
+
+import com.example.gestionafacil.Controllers.DespachosController;
+import com.example.gestionafacil.Controllers.UsuarioController;
+import com.example.gestionafacil.Models.Despacho;
+import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.R;
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DespachosFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import android.util.Log;
+
 public class DespachosFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public DespachosFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DespachosFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DespachosFragment newInstance(String param1, String param2) {
-        DespachosFragment fragment = new DespachosFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private RecyclerView recyclerView;
+    private DespachosAdapter adapter;
+    private DespachosController despachoController;
+    private SesionUsuario sessionManager;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_despachos, container, false);
+        recyclerView = rootView.findViewById(R.id.recyclerDespachos);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        return rootView;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        despachoController = new DespachosController();
+        sessionManager = new SesionUsuario(requireContext());
+        obtenerDespachos();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_despachos, container, false);
+    private void obtenerDespachos() {
+        String e_id = String.valueOf(sessionManager.getEstablishmentId());
+        String token = sessionManager.getToken();
+
+        despachoController.obtenerDespachos("ordenes_pendientes", e_id, token, new DespachosController.DespachoCallback() {
+            @Override
+            public void onDespachosLoaded(List<Despacho> despachos) {
+                for (Despacho despacho : despachos) {
+                    Log.d("DespachosFragment", "ID: " + despacho.getId());
+                    Log.d("DespachosFragment", "Denominación: " + despacho.getDenominacion());
+                    adapter = new DespachosAdapter(requireContext(), despachos);
+                    recyclerView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onDespachosLoadFailed(String errorMessage) {
+                // Manejar el error al cargar los despachos
+                Log.e("DespachosFragment", "Error al cargar los despachos: " + errorMessage);
+            }
+        });
     }
 }

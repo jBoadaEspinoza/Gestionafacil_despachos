@@ -52,8 +52,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onSuccess() {
                         // Inicio de sesión exitoso, mostrar un mensaje de éxito
                         String token = sesionUsuario.getToken();
-
-                        Toast.makeText(LoginActivity.this, "Token: " + token, Toast.LENGTH_SHORT).show();
+                        int e_id = sesionUsuario.getEstablishmentId();
+                        Toast.makeText(LoginActivity.this, "Token: " + e_id, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                     }

@@ -14,14 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GestionaFacil"
         tools:targetApi="31">
-        <activity
-            android:name=".Activities.MainActivity2"
-            android:exported="false"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.GestionaFacil.NoActionBar" />
-        <activity
-            android:name=".Activities.DespachosActivity"
-            android:exported="false" />
+
+
         <activity
             android:name=".Views.Activities.LoginActivity"
             android:exported="true">
@@ -31,9 +25,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".Views.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.GestionaFacil.NoActionBar" />
+
     </application>
 
 </manifest>

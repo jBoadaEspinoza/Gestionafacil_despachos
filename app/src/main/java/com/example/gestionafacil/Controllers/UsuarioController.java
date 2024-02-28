@@ -35,7 +35,10 @@ public class UsuarioController {
                         boolean success = loginResponse.getResponse().isSuccess();
                         if (success) {
                             String token = loginResponse.getResponse().getToken();
+                            String e_id = loginResponse.getResponse().getData().getEstablecimiento().getId();
+
                             sessionManager.saveToken(token); // Guardar el token en SharedPreferences
+                            sessionManager.saveEstablishmentId(Integer.parseInt(e_id));
                             listener.onSuccess();
                         } else {
                             String errorMessage = loginResponse.getResponse().getMessage();
