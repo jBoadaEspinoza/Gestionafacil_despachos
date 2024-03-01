@@ -63,6 +63,10 @@ public class LoginResponse {
         @SerializedName("usuario")
         private Usuario usuario;
 
+        public void setEstablecimiento(Establecimiento establecimiento) {
+            this.establecimiento = establecimiento;
+        }
+
         public Establecimiento getEstablecimiento() {
             return establecimiento;
         }

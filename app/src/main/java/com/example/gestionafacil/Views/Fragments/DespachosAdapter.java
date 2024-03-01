@@ -28,7 +28,7 @@ public class DespachosAdapter  extends RecyclerView.Adapter<DespachosAdapter.Des
     public void onBindViewHolder(@NonNull DespachoViewHolder holder, int position) {
         Despacho despacho = despachos.get(position);
         holder.textViewTitulo.setText(despacho.getDenominacion());
-        holder.textViewEstablecimiento.setText(despacho.getEstablecimiento());
+        holder.textViewEstablecimiento.setText(despacho.getAreaDeDespacho());
         holder.textViewCantidad.setText(despacho.getCantidad());
     }
 

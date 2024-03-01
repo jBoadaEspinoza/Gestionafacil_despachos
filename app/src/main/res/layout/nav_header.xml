@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="300dp"
+    android:padding="16dp"
+    android:gravity="center_vertical"
+    >
+    <!-- ImageView para la imagen -->
+
+    <!-- TextView para mostrar "Restaurant" más grande y en negrita -->
+
+    <ImageView
+        android:layout_width="193dp"
+        android:layout_height="133dp"
+        android:layout_gravity="center"
+        android:src="@drawable/_000014669" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restaurant"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="center"/>/>
+
+    <!-- TextView para mostrar el nombre del establecimiento -->
+    <TextView
+        android:id="@+id/textViewEstablishmentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre del Establecimiento"
+        android:textColor="@color/red"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"/>/>
+
+</LinearLayout>

@@ -5,6 +5,8 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+
+    <!-- Texto del título -->
     <TextView
         android:id="@+id/textViewTitulo"
         android:layout_width="match_parent"
@@ -14,30 +16,43 @@
         android:textColor="@android:color/black"
         android:layout_marginBottom="8dp"/>
 
-    <TextView
-        android:id="@+id/textViewEstablecimiento"
+    <!-- Contenedor horizontal para el establecimiento y la cantidad -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@android:color/darker_gray"
-        android:layout_marginBottom="4dp"/>
+        android:orientation="horizontal">
 
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/blue_square"
-        android:layout_below="@id/textViewEstablecimiento">
-
+        <!-- Texto del establecimiento -->
         <TextView
-            android:id="@+id/textViewCantidad"
-            android:layout_width="wrap_content"
+            android:id="@+id/textViewEstablecimiento"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:textSize="16sp"
             android:textColor="@android:color/darker_gray"
-            android:padding="8dp"
-            android:text="Cantidad"/>
+            android:layout_marginBottom="4dp"/>
 
-    </FrameLayout>
+        <!-- Cuadrado azul para la cantidad -->
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blue_square"
+            android:layout_gravity="center_vertical">
+
+            <!-- Texto de la cantidad -->
+            <TextView
+                android:id="@+id/textViewCantidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:padding="8dp"
+                android:text="Cantidad"/>
+
+        </FrameLayout>
+        <!-- Botón con icono de chevrón -->
+
+
+    </LinearLayout>
 
 </LinearLayout>

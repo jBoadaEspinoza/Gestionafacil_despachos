@@ -5,6 +5,8 @@ public class SesionUsuario {
     private static final String PREF_NAME = "UserToken";
     private static final String KEY_TOKEN = "token";
     private static final String KEY_ESTABLISHMENT_ID = "id_establecimiento";
+    private static final String KEY_ESTABLISHMENT_NAME = "nombre_establecimiento"; // Nuevo clave para el nombre del establecimiento
+
     private SharedPreferences sharedPreferences;
 
     public SesionUsuario(Context context) {
@@ -43,5 +45,23 @@ public class SesionUsuario {
         editor.apply();
     }
 
+    // Método para guardar el nombre del establecimiento
+    public void saveEstablishmentName(String establishmentName) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_ESTABLISHMENT_NAME, establishmentName);
+        editor.apply();
+    }
+
+    // Método para obtener el nombre del establecimiento
+    public String getEstablishmentName() {
+        return sharedPreferences.getString(KEY_ESTABLISHMENT_NAME, null);
+    }
+
+    // Método para limpiar el nombre del establecimiento
+    public void clearEstablishmentName() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(KEY_ESTABLISHMENT_NAME);
+        editor.apply();
+    }
 
 }
