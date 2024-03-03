@@ -27,21 +27,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(toggle);
-
         // Obtener una instancia de TextView para el nombre del establecimiento
         textViewEstablishmentName = navigationView.getHeaderView(0).findViewById(R.id.textViewEstablishmentName);
 
-        toggle.syncState();
 
         // Obtener el nombre del establecimiento de la sesión del usuario y establecerlo en el TextView
         SesionUsuario sesionUsuario = new SesionUsuario(this);

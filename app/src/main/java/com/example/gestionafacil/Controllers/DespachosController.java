@@ -3,7 +3,7 @@ package com.example.gestionafacil.Controllers;
 import android.content.Context;
 
 import com.example.gestionafacil.Models.Despacho;
-import com.example.gestionafacil.Views.Fragments.DespachosFragment;
+import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.services.DespachoService;
 import com.example.gestionafacil.services.RetrofitClient;
 import com.google.gson.JsonArray;
@@ -35,6 +35,7 @@ public class DespachosController {
                     JsonObject responseObj = responseBody.getAsJsonObject("response");
 
                     if (responseObj.has("success") && responseObj.get("success").getAsBoolean()) {
+
                         List<Despacho> despachos = procesarDatos(responseBody);
                         callback.onDespachosLoaded(despachos);
                     } else {

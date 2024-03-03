@@ -4,6 +4,37 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!-- Toolbar específico del fragmento -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarFragment"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+        <!-- Botón de tres puntos alineado a la derecha -->
+        <ImageView
+            android:id="@+id/btnOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/kebab_menu"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="Botón de opciones"
+            android:adjustViewBounds="true"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Buscar..."
+        android:iconifiedByDefault="false" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerDespachos"
         android:layout_width="match_parent"

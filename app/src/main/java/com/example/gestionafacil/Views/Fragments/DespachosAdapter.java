@@ -17,6 +17,11 @@ public class DespachosAdapter  extends RecyclerView.Adapter<DespachosAdapter.Des
         this.context = context;
         this.despachos = despachos;
     }
+    public void setDespachos(List<Despacho> despachos) {
+        this.despachos = despachos;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public DespachoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

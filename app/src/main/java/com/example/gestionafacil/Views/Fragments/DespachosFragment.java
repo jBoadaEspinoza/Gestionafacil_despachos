@@ -3,52 +3,108 @@ package com.example.gestionafacil.Views.Fragments;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.content.Context;
 
 import androidx.annotation.Nullable;
 
+import com.example.gestionafacil.Controllers.AreasDespachoController;
 import com.example.gestionafacil.Controllers.DespachosController;
 import com.example.gestionafacil.Controllers.UsuarioController;
+import com.example.gestionafacil.Models.AreaDespacho;
 import com.example.gestionafacil.Models.Despacho;
 import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.R;
+import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
 
-public class DespachosFragment extends Fragment {
+public class DespachosFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener{
 
 
     private RecyclerView recyclerView;
     private DespachosAdapter adapter;
     private DespachosController despachoController;
     private SesionUsuario sessionManager;
+    private DrawerLayout drawerLayout;
+    private List<Despacho> listdespachos;
+
+
+    public DespachosFragment() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_despachos, container, false);
         recyclerView = rootView.findViewById(R.id.recyclerDespachos);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Obtener el DrawerLayout desde la actividad principal
+        drawerLayout = getActivity().findViewById(R.id.drawer_layout);
+
+        // Configurar el Toolbar específico del fragmento
+        Toolbar toolbar = rootView.findViewById(R.id.toolbarFragment);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+
+        // Configurar el ActionBarDrawerToggle para controlar la apertura y el cierre del DrawerLayout
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(requireActivity(), drawerLayout, toolbar,
+                R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // Configurar el clic del botón de opciones
+        ImageView btnOptions = toolbar.findViewById(R.id.btnOptions);
+        btnOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Mostrar el menú emergente de opciones
+                showOptionsMenu(v);
+            }
+        });
+
+
         return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
         despachoController = new DespachosController();
         sessionManager = new SesionUsuario(requireContext());
         obtenerDespachos();
     }
 
     private void obtenerDespachos() {
+        listdespachos = new ArrayList<>();
         String e_id = String.valueOf(sessionManager.getEstablishmentId());
         String token = sessionManager.getToken();
 
@@ -58,9 +114,13 @@ public class DespachosFragment extends Fragment {
                 for (Despacho despacho : despachos) {
                     Log.d("DespachosFragment", "ID: " + despacho.getId());
                     Log.d("DespachosFragment", "Denominación: " + despacho.getDenominacion());
-                    adapter = new DespachosAdapter(requireContext(), despachos);
-                    recyclerView.setAdapter(adapter);
+
+
                 }
+                // Actualizar la lista de despachos con los despachos cargados
+                listdespachos.addAll(despachos);
+                adapter = new DespachosAdapter(requireContext(), despachos);
+                recyclerView.setAdapter(adapter);
             }
 
             @Override
@@ -70,4 +130,118 @@ public class DespachosFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Manejar la selección de elementos del menú
+        switch (item.getItemId()) {
+
+        }
+        drawerLayout.closeDrawers(); // Cerrar el cajón de navegación después de hacer clic
+        return true;
+    }
+
+    // Método para mostrar el menú emergente de opciones
+    private void showOptionsMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), view);
+        getActivity().getMenuInflater().inflate(R.menu.options_menu, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // Manejar los clics de los elementos del menú
+                int id = item.getItemId();
+                if (id == R.id.menu_search_filters) {
+                    // Acción para Filtros de Búsqueda
+
+                    Toast.makeText(requireContext(), "Filtros de Búsqueda seleccionados", Toast.LENGTH_SHORT).show();
+                    showFilterOptionsDialog();
+                    return true;
+                } else if (id == R.id.menu_help_feedback) {
+                    // Acción para Ayudas y Comentarios
+                    Toast.makeText(requireContext(), "Ayudas y Comentarios seleccionados", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
+    }
+
+    private void showFilterOptionsDialog() {
+        // Crear un AlertDialog.Builder y establecer el diseño personalizado
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.popup_filtros, null);
+        builder.setView(dialogView);
+
+        // Configurar el AlertDialog y mostrarlo
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Obtener una referencia al Spinner
+        Spinner spinnerOptions = dialogView.findViewById(R.id.spinnerOptions);
+
+        // Obtener los datos de las áreas utilizando el controlador de áreas
+        AreasDespachoController areasDespachoController = new AreasDespachoController(requireContext());
+        String token = sessionManager.getToken();
+
+        areasDespachoController.obtenerAreasDespacho(token, new AreasDespachoController.AreaDespachoCallback() {
+            @Override
+            public void onAreasDespachoLoaded(List<AreaDespacho> areasDespacho) {
+                // Crear un adaptador personalizado para el Spinner
+                ArrayAdapter<String> adapter1 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item);
+                adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                // Agregar las denominaciones singulares al adaptador
+                for (AreaDespacho area : areasDespacho) {
+                    adapter1.add(area.getDenominacionSingular());
+                }
+
+                // Establecer el adaptador en el Spinner
+                spinnerOptions.setAdapter(adapter1);
+
+                // Configurar acciones para los botones Cancelar y Aceptar
+                Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+                Button btnAccept = dialogView.findViewById(R.id.btnAccept);
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Acción para el botón Cancelar
+                        dialog.dismiss(); // Cerrar el diálogo
+                    }
+                });
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String areaSeleccionada = spinnerOptions.getSelectedItem().toString();
+                        List<Despacho> despachosFiltrados = new ArrayList<>();
+
+                        for (Despacho despacho : listdespachos) {
+                            if (despacho.getAreaDeDespacho().equals(areaSeleccionada)) {
+                                despachosFiltrados.add(despacho);
+                            }
+                        }
+                        // Verificar si se encontraron despachos para el área seleccionada
+                        if (despachosFiltrados.isEmpty()) {
+                            Toast.makeText(requireContext(), "No se encontraron despachos para el área seleccionada", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Actualizar el adaptador del RecyclerView con los despachos filtrados
+                            adapter.setDespachos(despachosFiltrados);
+                            dialog.dismiss(); // Cerrar el diálogo
+                        }
+                    }
+                });
+
+            }
+
+            @Override
+            public void onAreasDespachoLoadFailed(String errorMessage) {
+                // Manejar el error al cargar las áreas de despacho
+                Toast.makeText(requireContext(), "Error al cargar las áreas de despacho: " + errorMessage, Toast.LENGTH_SHORT).show();
+                dialog.dismiss(); // Cerrar el diálogo en caso de error
+            }
+        });
+    }
+
+
 }

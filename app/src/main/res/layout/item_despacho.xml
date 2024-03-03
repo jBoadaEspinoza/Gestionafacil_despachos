@@ -7,22 +7,24 @@
 
 
     <!-- Texto del título -->
-    <TextView
-        android:id="@+id/textViewTitulo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp"/>
 
     <!-- Contenedor horizontal para el establecimiento y la cantidad -->
+    <TextView
+        android:id="@+id/textViewTitulo"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <!-- Texto del establecimiento -->
+
         <TextView
             android:id="@+id/textViewEstablecimiento"
             android:layout_width="0dp"
