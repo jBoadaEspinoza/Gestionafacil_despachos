@@ -16,16 +16,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DespachosController {
+public class MesasController {
     private DespachoService service;
 
-    public DespachosController() {
+    public MesasController() {
 
         service = RetrofitClient.getClient().create(DespachoService.class);
     }
 
-    public void obtenerDespachos(String operacion, String eId, String token, final DespachoCallback callback) {
-        Call<JsonObject> call = service.getDespachos(operacion, eId, token);
+    public void obtenerMesas(String operacion, String aId, String token, final MesasController.MesasCallback callback) {
+        Call<JsonObject> call = service.getMesas_por_articulo(operacion, aId, token);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -35,27 +35,26 @@ public class DespachosController {
 
                     if (responseObj.has("success") && responseObj.get("success").getAsBoolean()) {
 
-                        List<Despacho> despachos = procesarDatos(responseBody);
-                        callback.onDespachosLoaded(despachos);
+                        List<Mesa> mesas = procesarDatos(responseBody);
+                        callback.onMesasLoaded(mesas);
                     } else {
-                        callback.onDespachosLoadFailed("La solicitud no tuvo éxito. Código de estado HTTP: " + response.code());
+                        callback.onMesassLoadFailed("La solicitud no tuvo éxito. Código de estado HTTP: " + response.code());
                     }
                 } else {
-                    callback.onDespachosLoadFailed("La solicitud no fue exitosa. Código de estado HTTP: " + response.code());
+                    callback.onMesassLoadFailed("La solicitud no fue exitosa. Código de estado HTTP: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                callback.onDespachosLoadFailed("Error al realizar la solicitud: " + t.getMessage());
+                callback.onMesassLoadFailed("Error al realizar la solicitud: " + t.getMessage());
             }
         });
 
     }
 
-
-    private List<Despacho> procesarDatos(JsonObject responseBody) {
-        List<Despacho> despachos = new ArrayList<>();
+    private List<Mesa> procesarDatos(JsonObject responseBody) {
+        List<Mesa> mesas = new ArrayList<>();
         JsonObject responseObj = responseBody.getAsJsonObject("response");
 
         if (responseObj.has("data")) {
@@ -64,18 +63,15 @@ public class DespachosController {
 
             for (JsonElement element : dataArray) {
                 JsonObject dataObject = element.getAsJsonObject();
-                // Convertir directamente el JsonObject en un objeto Despacho
-                Despacho despacho = gson.fromJson(dataObject, Despacho.class);
-
-                // Agregar el objeto Despacho a la lista
-                despachos.add(despacho);
+                Mesa mesa = gson.fromJson(dataObject, Mesa.class); // Convertir directamente a objeto Mesa
+                mesas.add(mesa);
             }
         }
 
-        return despachos;
+        return mesas;
     }
-    public interface DespachoCallback {
-        void onDespachosLoaded(List<Despacho> despachos);
-        void onDespachosLoadFailed(String errorMessage);
+    public interface MesasCallback {
+        void onMesasLoaded(List<Mesa> mesas);
+        void onMesassLoadFailed(String errorMessage);
     }
 }

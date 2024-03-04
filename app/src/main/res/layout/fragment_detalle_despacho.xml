@@ -1,14 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<!-- detalle_despacho_fragment.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Views.Fragments.DetalleDespacho">
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- Barra de herramientas -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back_button"
+            android:layout_gravity="start"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="Botón Back"
+            android:adjustViewBounds="true"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"/>
 
-</FrameLayout>
+        <!-- Título del fragmento -->
+        <TextView
+            android:id="@+id/textViewTituloFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="16dp"
+            android:gravity="center"
+            android:text="Nombre del Despacho" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- RecyclerView para mostrar las mesas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMesas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+
+</LinearLayout>

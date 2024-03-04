@@ -14,18 +14,13 @@
         android:textSize="16sp"
         android:layout_gravity="center_horizontal"/>
 
-    <!-- Separador -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black"/>
-
     <!-- Subtítulo "Área de Despacho" -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="8dp"
+        android:minHeight="150dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -49,18 +44,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="8dp"
+        android:gravity="end"
+        >
 
         <!-- Botones de Cancelar y Aceptar -->
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancelar"/>
+            android:text="Cancelar"
+            android:textColor="@color/red"
+            android:background="@null"
+            />
         <Button
             android:id="@+id/btnAccept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aceptar"/>
+            android:text="Aceptar"
+            android:textColor="@color/red"
+            android:background="@null"
+            />
     </LinearLayout>
 </LinearLayout>

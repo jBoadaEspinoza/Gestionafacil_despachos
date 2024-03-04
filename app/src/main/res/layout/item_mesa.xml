@@ -1,0 +1,61 @@
+<!-- item_mesa.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- Texto para mostrar la denominación de la mesa -->
+    <TextView
+        android:id="@+id/textViewMesaDenominacion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="start"
+        android:text="Nombre de la Mesa" />
+
+    <!-- Check para indicar si está seleccionada -->
+    <CheckBox
+        android:id="@+id/checkBoxSeleccionada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginEnd="8dp"
+        android:buttonTint="@color/red"/>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/blue_square"
+        android:layout_gravity="center_vertical">
+
+        <!-- Texto de la cantidad -->
+        <TextView
+            android:id="@+id/textViewCantidadMesas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:padding="8dp"
+            android:text="Cantidad"
+            android:gravity="center_vertical" />
+
+    </FrameLayout>
+    <!-- Texto para mostrar la cantidad de la mesa -->
+
+
+    <!-- Botón de chevron para mostrar detalles adicionales -->
+    <ImageView
+        android:id="@+id/btnDropdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/down_chevron"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="Botón Back"
+        android:adjustViewBounds="true"
+        android:maxWidth="30dp"
+        android:maxHeight="30dp"/>
+
+</LinearLayout>

@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,7 +44,8 @@ import java.util.List;
 
 import android.util.Log;
 
-public class DespachosFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener{
+public class DespachosFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener,
+        DespachosAdapter.OnDespachoClickListener{
 
 
     private RecyclerView recyclerView;
@@ -119,7 +122,8 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
                 }
                 // Actualizar la lista de despachos con los despachos cargados
                 listdespachos.addAll(despachos);
-                adapter = new DespachosAdapter(requireContext(), despachos);
+                adapter = new DespachosAdapter(requireContext(), despachos, DespachosFragment.this);
+                adapter.setOnDespachoClickListener(DespachosFragment.this);
                 recyclerView.setAdapter(adapter);
             }
 
@@ -243,5 +247,17 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
         });
     }
 
+    @Override
+    public void onDespachoClick(String titulo,String idDespacho) {
+        // Manejar el clic en el despacho aquí
+        // Puedes abrir un nuevo fragmento con el nombre del despacho como título
+        // Utiliza el FragmentManager para reemplazar el fragmento actual con el nuevo fragmento
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+        DetalleDespachoFragment detalleDespachoFragment = DetalleDespachoFragment.newInstance(titulo, idDespacho);
+        fragmentTransaction.replace(R.id.main_content, detalleDespachoFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 }

@@ -13,13 +13,20 @@ import java.util.List;
 public class DespachosAdapter  extends RecyclerView.Adapter<DespachosAdapter.DespachoViewHolder>{
     private Context context;
     private List<Despacho> despachos;
-    public DespachosAdapter(Context context, List<Despacho> despachos) {
+
+    private OnDespachoClickListener mListener;
+
+    public DespachosAdapter(Context context, List<Despacho> despachos, OnDespachoClickListener listener) {
         this.context = context;
         this.despachos = despachos;
     }
     public void setDespachos(List<Despacho> despachos) {
         this.despachos = despachos;
         notifyDataSetChanged();
+    }
+
+    public void setOnDespachoClickListener(OnDespachoClickListener listener) {
+        mListener = listener;
     }
 
     @NonNull
@@ -35,6 +42,18 @@ public class DespachosAdapter  extends RecyclerView.Adapter<DespachosAdapter.Des
         holder.textViewTitulo.setText(despacho.getDenominacion());
         holder.textViewEstablecimiento.setText(despacho.getAreaDeDespacho());
         holder.textViewCantidad.setText(despacho.getCantidad());
+
+        // Configurar el clic en el elemento
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Obtener el título del despacho seleccionado
+                String titulo = despacho.getDenominacion();
+                String id = despacho.getId();
+                // Notificar al listener del clic en el despacho
+                mListener.onDespachoClick(titulo, id);
+            }
+        });
     }
 
     @Override
@@ -53,5 +72,9 @@ public class DespachosAdapter  extends RecyclerView.Adapter<DespachosAdapter.Des
             textViewEstablecimiento = itemView.findViewById(R.id.textViewEstablecimiento);
             textViewCantidad = itemView.findViewById(R.id.textViewCantidad);
         }
+    }
+
+    public interface OnDespachoClickListener {
+        void onDespachoClick(String titulo, String id);
     }
 }
