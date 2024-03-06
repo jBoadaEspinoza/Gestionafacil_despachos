@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.gestionafacil.Controllers.MesasController;
+import com.example.gestionafacil.Controllers.MozosController;
+import com.example.gestionafacil.Models.GrupoMesa;
 import com.example.gestionafacil.Models.Mesa;
+import com.example.gestionafacil.Models.Mozo;
 import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.R;
 
@@ -70,10 +74,13 @@ public class DetalleDespachoFragment extends Fragment {
             }
         });
 
+
+
+
         // Inicializar el RecyclerView y configurar el MesasAdapter
         RecyclerView recyclerViewMesas = rootView.findViewById(R.id.recyclerViewMesas);
         recyclerViewMesas.setLayoutManager(new LinearLayoutManager(requireContext()));
-        MesasAdapter adapter = new MesasAdapter(requireContext(), new ArrayList<>());
+        MesaExpandableAdapter adapter = new MesaExpandableAdapter(new ArrayList<>());
         recyclerViewMesas.setAdapter(adapter);
 
         // Obtener las mesas correspondientes al despacho utilizando el MesasController
@@ -86,7 +93,14 @@ public class DetalleDespachoFragment extends Fragment {
             @Override
             public void onMesasLoaded(List<Mesa> mesas) {
                 // Actualizar el adaptador con las mesas obtenidas
-                adapter.setMesas(mesas);
+                List<GrupoMesa> grupos = new ArrayList<>();
+                for (Mesa mesa : mesas) {
+                    grupos.add(new GrupoMesa(mesa, new ArrayList<>()));
+                    obtenerMozos("detalle_segun_articulo_y_mesa", id_despacho, mesa.getMesa_id(), token, adapter);
+                }
+                adapter.setGrupos(grupos);
+
+
             }
 
             @Override
@@ -97,6 +111,22 @@ public class DetalleDespachoFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    private void obtenerMozos(String operacion, String aId, String mId, String token, MesaExpandableAdapter adapter) {
+        MozosController mozosController = new MozosController();
+        mozosController.obtenerMozos(operacion, aId, mId, token, new MozosController.MozosCallback() {
+            @Override
+            public void onMozosLoaded(List<Mozo> mozos) {
+                // Agregar mozos al grupo de mesa correspondiente
+                adapter.addMozosToMesa(mId, mozos);
+            }
+
+            @Override
+            public void onMozosLoadFailed(String errorMessage) {
+                // Aquí puedes manejar el fallo al cargar los mozos
+            }
+        });
     }
 
 

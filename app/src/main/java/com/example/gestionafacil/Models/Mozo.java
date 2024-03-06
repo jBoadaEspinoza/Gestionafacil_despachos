@@ -6,8 +6,8 @@ public class Mozo {
     String id;
     @SerializedName("mozo_nombre")
     String mozo_nombre;
-    @SerializedName("mozo_apellid")
-    String mozo_apellido;
+    @SerializedName("mozo_apellidos")
+    String mozo_apellidos;
     @SerializedName("ordenado")
     String ordenado;
 
@@ -28,11 +28,11 @@ public class Mozo {
     }
 
     public String getMozo_apellido() {
-        return mozo_apellido;
+        return mozo_apellidos;
     }
 
     public void setMozo_apellido(String mozo_apellido) {
-        this.mozo_apellido = mozo_apellido;
+        this.mozo_apellidos = mozo_apellido;
     }
 
     public String getOrdenado() {

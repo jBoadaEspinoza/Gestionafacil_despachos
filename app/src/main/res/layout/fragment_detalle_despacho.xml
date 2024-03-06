@@ -38,6 +38,26 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <LinearLayout
+        android:id="@+id/checkboxGlobalLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:textColor="@color/red"
+        android:gravity="end">
+
+        <CheckBox
+            android:id="@+id/checkboxGlobal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/red"
+            android:text="Todos"/>
+
+
+    </LinearLayout>
+
     <!-- RecyclerView para mostrar las mesas -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewMesas"
@@ -46,4 +66,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"/>
 
+    <Button
+        android:id="@+id/btnDespachar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:padding="16dp"
+        android:text="Despachar"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
 </LinearLayout>

@@ -7,10 +7,9 @@
         <item
             android:id="@+id/nav_home"
             android:title="Home" />
-
-
     </group>
 
+    <!-- Mueve este elemento fuera del grupo para que esté al final -->
     <item
         android:id="@+id/nav_logout"
         android:title="Cerrar Sesión" />

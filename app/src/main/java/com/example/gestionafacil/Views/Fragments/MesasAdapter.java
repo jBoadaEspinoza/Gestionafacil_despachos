@@ -1,10 +1,12 @@
 package com.example.gestionafacil.Views.Fragments;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -44,7 +46,26 @@ public class MesasAdapter extends RecyclerView.Adapter<MesasAdapter.MesaViewHold
         holder.btnDropdown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Aquí puedes implementar la lógica para mostrar los detalles de la mesa
+                PopupMenu popupMenu = new PopupMenu(context, holder.btnDropdown);
+                popupMenu.getMenuInflater().inflate(R.menu.mesa_detalle_dropdown, popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        // Aquí puedes manejar las acciones de los elementos del menú
+                        int itemId = item.getItemId();
+                        if (itemId == R.id.item_opcion1) {
+                            // Acción para la opción 1
+                            return true;
+                        } else if (itemId == R.id.item_opcion2) {
+                            // Acción para la opción 2
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+
+                popupMenu.show();
             }
         });
     }
