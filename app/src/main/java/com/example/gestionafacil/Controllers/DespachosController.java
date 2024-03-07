@@ -1,7 +1,14 @@
 package com.example.gestionafacil.Controllers;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+
 import com.example.gestionafacil.Models.Despacho;
 import com.example.gestionafacil.Models.Mesa;
+import com.example.gestionafacil.Models.SesionUsuario;
+import com.example.gestionafacil.Views.MainActivity;
 import com.example.gestionafacil.services.DespachoService;
 import com.example.gestionafacil.services.RetrofitClient;
 import com.google.gson.Gson;
@@ -18,10 +25,14 @@ import retrofit2.Response;
 
 public class DespachosController {
     private DespachoService service;
+    private SesionUsuario sessionUsuario; // Instancia de la clase SesionUsuario
+    private Context context;
 
-    public DespachosController() {
-
+    public DespachosController(Context context) {
+        this.context = context;
         service = RetrofitClient.getClient().create(DespachoService.class);
+        sessionUsuario = new SesionUsuario(context);
+
     }
 
     public void obtenerDespachos(String operacion, String eId, String token, final DespachoCallback callback) {
@@ -34,10 +45,24 @@ public class DespachosController {
                     JsonObject responseObj = responseBody.getAsJsonObject("response");
 
                     if (responseObj.has("success") && responseObj.get("success").getAsBoolean()) {
+                        // Obtener el nuevo token del JSON de respuesta, si está disponible
+                        String nuevoToken = responseObj.has("token_actualizado") ? responseObj.get("token_actualizado").getAsString() : null;
+
+                        // Guardar el nuevo token en la sesión
+                        if (nuevoToken != null) {
+                            sessionUsuario.saveToken(nuevoToken);
+                        }
 
                         List<Despacho> despachos = procesarDatos(responseBody);
+
                         callback.onDespachosLoaded(despachos);
                     } else {
+                        if (responseObj.has("msg") && responseObj.get("msg").getAsString().equals("Token expirado")) {
+                            // Borrar el token de la sesión si el mensaje indica que el token ha expirado
+                            sessionUsuario.logout();
+                            // Mostrar el diálogo de token expirado
+                            sessionUsuario.mostrarDialogoTokenExpirado(context);
+                        }
                         callback.onDespachosLoadFailed("La solicitud no tuvo éxito. Código de estado HTTP: " + response.code());
                     }
                 } else {
@@ -52,6 +77,7 @@ public class DespachosController {
         });
 
     }
+
 
 
     private List<Despacho> procesarDatos(JsonObject responseBody) {

@@ -1,5 +1,6 @@
 package com.example.gestionafacil.Views.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,7 @@ import com.example.gestionafacil.Models.AreaDespacho;
 import com.example.gestionafacil.Models.Despacho;
 import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.R;
+import com.example.gestionafacil.Views.Activities.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -101,7 +103,7 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        despachoController = new DespachosController();
+        despachoController = new DespachosController(requireContext());
         sessionManager = new SesionUsuario(requireContext());
         obtenerDespachos();
     }
@@ -110,6 +112,7 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
         listdespachos = new ArrayList<>();
         String e_id = String.valueOf(sessionManager.getEstablishmentId());
         String token = sessionManager.getToken();
+        //String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRlX2NyZWF0ZWQiOjE3MDk2NzUwMjQsImRhdGVfZXhwaXJhdGlvbiI6MTcwOTY3NjgyNCwidXNlcl9pZCI6IjU4IiwiYnVzaW5lc3NfaWQiOiIzIn0.-F-nm0Uxar15dTNspq3q3Ho8yGKoPhgvodB1Qka_PAU";
 
         despachoController.obtenerDespachos("ordenes_pendientes", e_id, token, new DespachosController.DespachoCallback() {
             @Override
@@ -137,10 +140,18 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Manejar la selección de elementos del menú
-        switch (item.getItemId()) {
+        int id = item.getItemId();
+        if (id == R.id.nav_logout) {
+            // Cerrar la sesión del usuario
+            sessionManager.logout();
 
+            // Abrir LoginActivity
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            return true;
         }
+
         drawerLayout.closeDrawers(); // Cerrar el cajón de navegación después de hacer clic
         return true;
     }

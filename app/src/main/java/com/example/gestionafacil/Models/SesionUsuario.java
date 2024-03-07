@@ -1,6 +1,12 @@
 package com.example.gestionafacil.Models;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+
+import com.example.gestionafacil.Views.Activities.LoginActivity;
+
 public class SesionUsuario {
     private static final String PREF_NAME = "UserToken";
     private static final String KEY_TOKEN = "token";
@@ -62,6 +68,30 @@ public class SesionUsuario {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(KEY_ESTABLISHMENT_NAME);
         editor.apply();
+    }
+
+    public void logout() {
+        clearToken();
+        clearEstablishmentId();
+        clearEstablishmentName();
+    }
+
+    public void mostrarDialogoTokenExpirado(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Token Expirado")
+                .setMessage("Su token de sesión ha expirado. Por favor, vuelva a iniciar sesión.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Crear un Intent para iniciar LoginActivity
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        // Limpiar la pila de actividades y abrir LoginActivity
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        context.startActivity(intent);
+                    }
+                })
+                .setCancelable(false) // Evitar que el usuario cierre el diálogo tocando fuera del área del diálogo
+                .show();
     }
 
 }

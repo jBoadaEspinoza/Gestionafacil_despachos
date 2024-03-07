@@ -84,7 +84,7 @@ public class DetalleDespachoFragment extends Fragment {
         recyclerViewMesas.setAdapter(adapter);
 
         // Obtener las mesas correspondientes al despacho utilizando el MesasController
-        MesasController mesasController = new MesasController();
+        MesasController mesasController = new MesasController(requireContext());
         // Obtener el token de la sesión del usuario
         sessionManager = new SesionUsuario(requireContext());
         String token = sessionManager.getToken();
