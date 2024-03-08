@@ -1,62 +1,92 @@
-<!-- item_mesa.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="16dp">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
-    <!-- Texto para mostrar la denominación de la mesa -->
-    <TextView
-        android:id="@+id/textViewMesaDenominacion"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:gravity="start"
-        android:textColor="@color/black"
-        android:text="Nombre de la Mesa" />
+        android:padding="16dp">
 
-    <!-- Check para indicar si está seleccionada -->
-    <CheckBox
-        android:id="@+id/checkBoxSeleccionada"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:layout_marginEnd="8dp"
-        android:buttonTint="@color/red"/>
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/blue_square"
-        android:layout_gravity="center_vertical">
+        <!-- LinearLayout para mostrar la denominación de la mesa, el CheckBox y el botón de chevron -->
+        <LinearLayout
+            android:id="@+id/linearLayoutMesa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnDropdown"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0">
 
-        <!-- Texto de la cantidad -->
-        <TextView
-            android:id="@+id/textViewCantidadMesas"
+            <!-- Texto para mostrar la denominación de la mesa -->
+            <TextView
+                android:id="@+id/textViewMesaDenominacion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="start"
+                android:textColor="@color/black"
+                android:text="Nombre de la Mesa" />
+
+            <!-- Check para indicar si está seleccionada -->
+            <CheckBox
+                android:id="@+id/checkBoxSeleccionada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="8dp"
+                android:buttonTint="@color/red"/>
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/blue_square"
+                android:layout_gravity="center_vertical">
+
+                <!-- Texto de la cantidad -->
+                <TextView
+                    android:id="@+id/textViewCantidadMesas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:padding="8dp"
+                    android:text="Cantidad"/>
+
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Botón de chevron para mostrar detalles adicionales -->
+        <ImageView
+            android:id="@+id/btnDropdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:padding="8dp"
-            android:text="Cantidad"
-            android:gravity="center_vertical" />
+            android:src="@drawable/down_chevron"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="Botón down"
+            android:adjustViewBounds="true"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"
+            app:layout_constraintTop_toTopOf="@id/linearLayoutMesa"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    </FrameLayout>
-    <!-- Texto para mostrar la cantidad de la mesa -->
+        <!-- RecyclerView para mostrar los mozos -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewMozos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayoutMesa"
+            />
 
-
-    <!-- Botón de chevron para mostrar detalles adicionales -->
-    <ImageView
-        android:id="@+id/btnDropdown"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/down_chevron"
-        android:layout_gravity="end"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="Botón down"
-        android:adjustViewBounds="true"
-        android:maxWidth="30dp"
-        android:maxHeight="30dp"/>
-
-</LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -75,6 +75,7 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
         Toolbar toolbar = rootView.findViewById(R.id.toolbarFragment);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
 
+
         // Configurar el ActionBarDrawerToggle para controlar la apertura y el cierre del DrawerLayout
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(requireActivity(), drawerLayout, toolbar,
                 R.string.open, R.string.close);

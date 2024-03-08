@@ -70,7 +70,6 @@ public class MesaExpandableAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             if (position == currentPos) {
                 // Este es un elemento de la mesa
                 MesaViewHolder mesaHolder = (MesaViewHolder) holder;
-                mesaHolder.bindMesa(grupo.getMesa());
 
                 // Configurar OnClickListener para el botón btndown
                 mesaHolder.btnDropdown.setOnClickListener(v -> {
@@ -87,7 +86,6 @@ public class MesaExpandableAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             if (position < currentPos + grupo.getMozos().size()) {
                 MozoViewHolder mozoHolder = (MozoViewHolder) holder;
                 Mozo mozo = grupo.getMozos().get(position - currentPos); // Ajuste de posición relativa
-                mozoHolder.bindMozo(mozo, true);
                 return;
             }
 

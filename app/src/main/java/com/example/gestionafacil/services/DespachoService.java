@@ -1,6 +1,8 @@
 package com.example.gestionafacil.services;
 
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 import com.google.gson.JsonObject;
 import retrofit2.Call;
@@ -26,5 +28,10 @@ public interface DespachoService {
             @Query("a_id") String e_id,
             @Query("m_id") String m_id,
             @Query("token") String token
+    );
+
+    @POST("control-de-despachos/despachar")
+    Call<JsonObject> DespacharPedido(
+            @Body JsonObject requestBody
     );
 }

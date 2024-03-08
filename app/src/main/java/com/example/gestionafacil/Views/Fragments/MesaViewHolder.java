@@ -2,6 +2,7 @@ package com.example.gestionafacil.Views.Fragments;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,10 +15,11 @@ import java.util.List;
 
 public class MesaViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView textViewMesaDenominacion;
-    private CheckBox checkBoxSeleccionada;
-    private TextView textViewCantidadMesas;
+    TextView textViewMesaDenominacion;
+    public CheckBox checkBoxSeleccionada;
+    public TextView textViewCantidadMesas;
     public ImageView btnDropdown;
+    RecyclerView recyclerViewMozos;
 
     public MesaViewHolder(View itemView) {
         super(itemView);
@@ -25,23 +27,20 @@ public class MesaViewHolder extends RecyclerView.ViewHolder {
         checkBoxSeleccionada = itemView.findViewById(R.id.checkBoxSeleccionada);
         textViewCantidadMesas = itemView.findViewById(R.id.textViewCantidadMesas);
         btnDropdown = itemView.findViewById(R.id.btnDropdown);
-        // Encuentra y asigna otras vistas aquí si es necesario
-    }
 
-    public void bindMesa(Mesa mesa) {
-        // Aquí configura los datos de la mesa en las vistas correspondientes
-        textViewMesaDenominacion.setText(mesa.getMesa_denominacion()); // Suponiendo que "getNombre" es el método para obtener el nombre de la mesa
-        textViewCantidadMesas.setText(mesa.getCantidad()); // Suponiendo que "getNombre" es el método para obtener el nombre de la mesa
+        recyclerViewMozos = itemView.findViewById(R.id.recyclerViewMozos);
 
     }
-    public void showMozos(boolean show) {
+
+    void bindMozosAdapter(MozosAdapter mozosAdapter) {
+        recyclerViewMozos.setAdapter(mozosAdapter);
+    }
+
+    void showMozos(boolean show) {
         if (show) {
-            // Mostrar los mozos
-            textViewCantidadMesas.setVisibility(View.VISIBLE);
+            recyclerViewMozos.setVisibility(View.VISIBLE);
         } else {
-            // Ocultar los mozos
-            textViewCantidadMesas.setVisibility(View.GONE);
+            recyclerViewMozos.setVisibility(View.GONE);
         }
     }
-
 }

@@ -1,6 +1,5 @@
 package com.example.gestionafacil.Controllers;
 
-import com.example.gestionafacil.Models.Mesa;
 import com.example.gestionafacil.Models.Mozo;
 import com.example.gestionafacil.services.DespachoService;
 import com.example.gestionafacil.services.RetrofitClient;

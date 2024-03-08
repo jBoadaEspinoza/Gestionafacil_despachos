@@ -12,24 +12,19 @@ import androidx.annotation.NonNull;
 
 public class MozoViewHolder extends RecyclerView.ViewHolder {
 
+    public TextView textViewNumOrder;
     public TextView textViewMozoNombre;
+    public TextView textViewOrderTime;
     public CheckBox checkBoxSeleccionado;
 
     public MozoViewHolder(@NonNull View itemView) {
         super(itemView);
+        textViewNumOrder = itemView.findViewById(R.id.textViewNumOrder);
         textViewMozoNombre = itemView.findViewById(R.id.textViewMozoNombre);
+        textViewOrderTime = itemView.findViewById(R.id.textViewOrderTime);
         checkBoxSeleccionado = itemView.findViewById(R.id.checkBoxSeleccionado);
     }
 
-    public void bindMozo(Mozo mozo, boolean show) {
-        if (show) {
-            textViewMozoNombre.setText(mozo.getMozo_nombre()); // Asignar el nombre del mozo al TextView
-            textViewMozoNombre.setVisibility(View.VISIBLE);
-            checkBoxSeleccionado.setVisibility(View.VISIBLE);
-        } else {
-            textViewMozoNombre.setVisibility(View.GONE);
-            checkBoxSeleccionado.setVisibility(View.GONE);
-        }
-    }
+
 }
 

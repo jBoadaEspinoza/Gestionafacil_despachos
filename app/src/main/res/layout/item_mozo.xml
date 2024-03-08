@@ -5,15 +5,51 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
+    <!-- TextView para mostrar el número de orden -->
+    <TextView
+        android:id="@+id/textViewNumOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:text="NumOrdero " />
+
+    <!-- TextView para mostrar "Ordenado por" -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/gray"
+        android:text="Ordenado por " />
+
     <!-- TextView para mostrar el nombre del mozo -->
     <TextView
         android:id="@+id/textViewMozoNombre"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:textSize="16sp"
+        android:textStyle="bold"
+
         android:textColor="@android:color/black"
         android:text="Nombre del Mozo" />
+
+    <!-- TextView para mostrar "hace" -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/gray"
+        android:text=" hace " />
+
+    <!-- TextView para mostrar el tiempo transcurrido -->
+    <TextView
+        android:id="@+id/textViewOrderTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:text="tiempo" />
 
     <!-- CheckBox para indicar si el mozo está seleccionado -->
     <CheckBox
@@ -21,6 +57,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:buttonTint="@color/red"/>
+        android:buttonTint="@color/red" />
 
 </LinearLayout>
