@@ -25,6 +25,9 @@ public class MozoViewHolder extends RecyclerView.ViewHolder {
         checkBoxSeleccionado = itemView.findViewById(R.id.checkBoxSeleccionado);
     }
 
+    public void bind(Mozo mozo) {
+        checkBoxSeleccionado.setChecked(mozo.isChecked()); // Establecer el estado del checkbox
+    }
 
 }
 

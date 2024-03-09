@@ -43,4 +43,10 @@ public class MesaViewHolder extends RecyclerView.ViewHolder {
             recyclerViewMozos.setVisibility(View.GONE);
         }
     }
+
+    public void setMesaSelected(boolean isSelected) {
+        checkBoxSeleccionada.setChecked(isSelected);
+    }
+
+
 }

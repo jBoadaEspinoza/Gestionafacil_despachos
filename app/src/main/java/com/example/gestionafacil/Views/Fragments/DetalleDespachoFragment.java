@@ -1,8 +1,11 @@
 package com.example.gestionafacil.Views.Fragments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,9 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.gestionafacil.Controllers.DespacharController;
 import com.example.gestionafacil.Controllers.MesasController;
 import com.example.gestionafacil.Controllers.MozosController;
 import com.example.gestionafacil.Models.GrupoMesa;
@@ -20,6 +28,8 @@ import com.example.gestionafacil.Models.Mesa;
 import com.example.gestionafacil.Models.Mozo;
 import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.R;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +88,8 @@ public class DetalleDespachoFragment extends Fragment {
 
 
 
+
+
         // Inicializar el RecyclerView y configurar el MesasAdapter
         RecyclerView recyclerViewMesas = rootView.findViewById(R.id.recyclerViewMesas);
         recyclerViewMesas.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -86,6 +98,45 @@ public class DetalleDespachoFragment extends Fragment {
 
         // Obtener las mesas correspondientes al despacho
         obtenerMesas();
+        // Configurar el clic del botón de despachar
+        Button btnDespachar = rootView.findViewById(R.id.btnDespachar);
+        btnDespachar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Imprimir la lista de mozos seleccionados
+                mesasAdapter.imprimirMozosAgregados();
+
+                // Obtener los mozos seleccionados del adaptador
+                List<Mozo> mozosSeleccionados = mesasAdapter.getMozosAgregados();
+
+                // Crear un JsonArray para almacenar los IDs de los mozos seleccionados
+                JsonArray idsMozos = new JsonArray();
+                for (Mozo mozo : mozosSeleccionados) {
+                    idsMozos.add(mozo.getId());
+                }
+
+                // Obtener el token de la sesión de usuario (si es necesario)
+                String token = sessionManager.getToken(); // Asegúrate de tener implementado el manejo del token
+
+                // Llamar al método despacharPedidos para despachar los pedidos
+                despacharPedidos(idsMozos, token);
+            }
+        });
+
+        // Obtener referencia al CheckBox "Todos"
+        CheckBox checkBoxTodos = rootView.findViewById(R.id.checkboxGlobal);
+
+        // Agregar un listener al CheckBox "Todos"
+        checkBoxTodos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (mesasAdapter != null) {
+                    mesasAdapter.selectAllCheckboxes(isChecked);
+                }
+            }
+        });
+
+
 
         return rootView;
     }
@@ -127,6 +178,42 @@ public class DetalleDespachoFragment extends Fragment {
             @Override
             public void onMozosLoadFailed(String errorMessage) {
                 // Aquí puedes manejar el fallo al cargar los mozos
+            }
+        });
+    }
+
+    // Método para despachar los pedidos
+    // Método para despachar los pedidos
+    private void despacharPedidos(JsonArray idsMozos, String token) {
+        DespacharController despacharController = new DespacharController(getContext());
+
+        // Mostrar un diálogo de carga o indicador de progreso si es necesario
+        // (esto dependerá de tu implementación)
+
+        despacharController.despacharPedido(idsMozos, token, new DespacharController.DespacharCallback() {
+            @Override
+            public void onDespachoSuccess(JsonObject responseBody) {
+                mostrarDialogoExito();
+            }
+
+            @Override
+            public void onDespachoFailure(String errorMessage) {
+                // La solicitud de despacho falló
+                // Manejar el error (por ejemplo, mostrar un mensaje de error)
+            }
+
+            private void mostrarDialogoExito() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Registro exitoso")
+                        .setMessage("El despacho se realizó con éxito.")
+                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }

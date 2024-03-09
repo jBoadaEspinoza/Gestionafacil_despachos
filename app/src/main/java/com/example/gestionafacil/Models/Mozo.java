@@ -69,7 +69,10 @@ public class Mozo {
 
             // Convertir los milisegundos a minutos
             long minutosTranscurridos = diferenciaMillis / (60 * 1000);
-
+            // Si la diferencia es menor a un minuto, mostrar "Hace un momento"
+            if (diferenciaMillis < 60 * 1000) {
+                return "Hace un momento";
+            }
             // Formatear la cadena de tiempo transcurrido
             if (minutosTranscurridos < 60) {
                 return minutosTranscurridos + " minutos";

@@ -26,15 +26,6 @@ public class MozosAdapter extends RecyclerView.Adapter<MozoViewHolder>{
         this.listener = listener;
     }
 
-    // Método para imprimir la lista completa de mozos seleccionados
-    public void imprimirMozosSeleccionados() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Mozos seleccionados:");
-        for (Mozo mozo : mozosSeleccionados) {
-            stringBuilder.append("\nID: ").append(mozo.getId()).append(", Nombre: ").append(mozo.getMozo_nombre());
-        }
-        Log.d("MozosAdapter", stringBuilder.toString());
-    }
 
     @NonNull
     @Override
@@ -52,18 +43,22 @@ public class MozosAdapter extends RecyclerView.Adapter<MozoViewHolder>{
         String primerNombre = partesNombre[0];
         holder.textViewMozoNombre.setText(primerNombre);
         holder.textViewOrderTime.setText(mozo.tiempoTranscurrido());
-
-        // Manejar clics en el checkbox
+        holder.bind(mozo);
         holder.checkBoxSeleccionado.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 if (!mozosSeleccionados.contains(mozo)) {
                     mozosSeleccionados.add(mozo); // Agregar el mozo a la lista de mozos seleccionados si no está presente
+                    mozo.setChecked(isChecked);                    listener.onMozoCheckedChanged(mozosSeleccionados.size());
+                    listener.onMozosListChanged(mozo);
                 }
             } else {
+                mozo.setChecked(false);
                 mozosSeleccionados.remove(mozo); // Quitar el mozo de la lista de mozos seleccionados
+                // Notificar deselección
+                listener.onMozoCheckedChanged(mozosSeleccionados.size());
+                // Notificar para borrar el mozo de la otra lista
+                listener.onMozoRemoved(mozo);
             }
-            // Llamar al método en la interfaz del listener para notificar cambios en los mozos seleccionados
-            listener.onMozoCheckedChanged(mozosSeleccionados.size());
         });
     }
 
@@ -72,13 +67,10 @@ public class MozosAdapter extends RecyclerView.Adapter<MozoViewHolder>{
         return mozoList.size();
     }
 
-    // Interfaz para manejar cambios en los mozos seleccionados
     public interface OnMozoCheckedChangeListener {
         void onMozoCheckedChanged(int selectedCount);
-    }
+        void onMozosListChanged(Mozo mozo);
+        void onMozoRemoved(Mozo mozo);
 
-    // Método para obtener la lista de mozos seleccionados
-    public List<Mozo> getMozosSeleccionados() {
-        return mozosSeleccionados;
     }
 }

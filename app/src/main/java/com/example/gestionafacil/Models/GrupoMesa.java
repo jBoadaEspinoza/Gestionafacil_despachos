@@ -9,13 +9,20 @@ public class  GrupoMesa{
 
     private boolean isExpandable;
 
+    private boolean isSelected;
 
     public GrupoMesa(Mesa mesa, List<Mozo> mozos, boolean isExpandable) {
         this.mesa = mesa;
         this.mozos = mozos;
         this.isExpandable = isExpandable;
     }
+    public boolean isSelected() {
+        return isSelected;
+    }
 
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
     public Mesa getMesa() {
         return mesa;
     }

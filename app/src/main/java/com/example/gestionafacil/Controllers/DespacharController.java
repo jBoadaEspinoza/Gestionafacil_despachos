@@ -26,7 +26,7 @@ public class DespacharController {
     public void despacharPedido(JsonArray idsMozos, String token, DespacharCallback callback) {
         // Construir el objeto JSON de la solicitud
         JsonObject requestBody = new JsonObject();
-        requestBody.add("ids_mozos", idsMozos); // Agregar la lista de IDs de mozos
+        requestBody.add("pdb_ids", idsMozos); // Agregar la lista de IDs de mozos
         requestBody.addProperty("token", token); // Agregar el token
 
         Call<JsonObject> call = service.DespacharPedido(requestBody);

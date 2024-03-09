@@ -21,6 +21,16 @@ public class Mesa {
         return mesa_denominacion;
     }
 
+    boolean isChecked; // Nuevo campo para indicar si la mesa está seleccionada
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
     public void setMesa_denominacion(String mesa_denominacion) {
         this.mesa_denominacion = mesa_denominacion;
     }
