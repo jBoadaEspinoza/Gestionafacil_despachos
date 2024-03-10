@@ -207,7 +207,8 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
                 // Crear un adaptador personalizado para el Spinner
                 ArrayAdapter<String> adapter1 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item);
                 adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
+                // Agregar la opción "Todos" al adaptador
+                adapter1.add("Todos");
                 // Agregar las denominaciones singulares al adaptador
                 for (AreaDespacho area : areasDespacho) {
                     adapter1.add(area.getDenominacionSingular());
@@ -232,9 +233,17 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
                         String areaSeleccionada = spinnerOptions.getSelectedItem().toString();
                         List<Despacho> despachosFiltrados = new ArrayList<>();
 
-                        for (Despacho despacho : listdespachos) {
-                            if (despacho.getAreaDeDespacho().equals(areaSeleccionada)) {
-                                despachosFiltrados.add(despacho);
+                        // Verificar si se seleccionó la opción "Todos"
+                        if (areaSeleccionada.equals("Todos")) {
+                            // Cargar la lista original sin filtrar
+                            despachosFiltrados = listdespachos;
+                        } else {
+                            // Filtrar los despachos por el área seleccionada
+                            despachosFiltrados = new ArrayList<>();
+                            for (Despacho despacho : listdespachos) {
+                                if (despacho.getAreaDeDespacho().equals(areaSeleccionada)) {
+                                    despachosFiltrados.add(despacho);
+                                }
                             }
                         }
                         // Verificar si se encontraron despachos para el área seleccionada

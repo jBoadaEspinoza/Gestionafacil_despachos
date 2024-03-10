@@ -1,9 +1,12 @@
 package com.example.gestionafacil.Views.Fragments;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,9 +20,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Context;
 
+import com.bumptech.glide.Glide;
 import com.example.gestionafacil.Controllers.DespacharController;
 import com.example.gestionafacil.Controllers.MesasController;
 import com.example.gestionafacil.Controllers.MozosController;
@@ -28,6 +34,8 @@ import com.example.gestionafacil.Models.Mesa;
 import com.example.gestionafacil.Models.Mozo;
 import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.R;
+import com.example.gestionafacil.Views.DespachoDialog;
+import com.example.gestionafacil.Views.MainActivity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -118,23 +126,31 @@ public class DetalleDespachoFragment extends Fragment {
                 // Obtener el token de la sesión de usuario (si es necesario)
                 String token = sessionManager.getToken(); // Asegúrate de tener implementado el manejo del token
 
-                // Llamar al método despacharPedidos para despachar los pedidos
-                despacharPedidos(idsMozos, token);
+                if(mozosSeleccionados.size() > 0){
+                    mostrarAlerta(getContext(), mozosSeleccionados.size());
+                }else{
+                    mostrarAlertaVacio(getContext());
+                }
+                //despacharPedidos(idsMozos, token);
             }
         });
 
         // Obtener referencia al CheckBox "Todos"
         CheckBox checkBoxTodos = rootView.findViewById(R.id.checkboxGlobal);
-
         // Agregar un listener al CheckBox "Todos"
         checkBoxTodos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (mesasAdapter != null) {
-                    mesasAdapter.selectAllCheckboxes(isChecked);
+                // Si el checkbox global está marcado
+                if (isChecked) {
+                    mesasAdapter.selectAllItems();
+                } else {
+                    checkBoxTodos.setChecked(false);
                 }
             }
         });
+        mesasAdapter.setCheckBoxGlobal(checkBoxTodos);
+
 
 
 
@@ -183,40 +199,72 @@ public class DetalleDespachoFragment extends Fragment {
     }
 
     // Método para despachar los pedidos
-    // Método para despachar los pedidos
     private void despacharPedidos(JsonArray idsMozos, String token) {
         DespacharController despacharController = new DespacharController(getContext());
-
-        // Mostrar un diálogo de carga o indicador de progreso si es necesario
-        // (esto dependerá de tu implementación)
-
         despacharController.despacharPedido(idsMozos, token, new DespacharController.DespacharCallback() {
             @Override
             public void onDespachoSuccess(JsonObject responseBody) {
-                mostrarDialogoExito();
+
             }
 
             @Override
             public void onDespachoFailure(String errorMessage) {
                 // La solicitud de despacho falló
-                // Manejar el error (por ejemplo, mostrar un mensaje de error)
-            }
-
-            private void mostrarDialogoExito() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Registro exitoso")
-                        .setMessage("El despacho se realizó con éxito.")
-                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                AlertDialog dialog = builder.create();
-                dialog.show();
             }
         });
     }
+    private void mostrarDialogoDespachoExitoso(int cantidadDespachos) {
+        DespachoDialog dialog = new DespachoDialog(getContext(), cantidadDespachos);
+        dialog.show();
+    }
 
+    public static void mostrarAlerta(Context context, int cantidadDespachos) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Despachos enviados con exito");
 
+        // Crear un ImageView para mostrar el GIF
+        ImageView imageView = new ImageView(context);
+        imageView.setLayoutParams(new LinearLayout.LayoutParams(200, 200)); // Ajusta el tamaño del ImageView según sea necesario
+
+        // Cargar el GIF usando Glide y mostrarlo en el ImageView
+        Glide.with(context)
+                .asGif()
+                .load(R.drawable.system_regular_31_check)
+                .into(imageView);
+
+        // Agregar el ImageView al AlertDialog
+        builder.setView(imageView);
+        builder.setMessage("Despachos enviados: " + cantidadDespachos);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // El usuario hizo clic en el botón "OK", cierra el diálogo
+                dialog.dismiss();
+
+                // Iniciar la actividad MainActivity
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpia todas las actividades anteriores
+                context.startActivity(intent);
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public static void mostrarAlertaVacio(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("No a seleccionado ningun pedido");
+
+        // Crear un ImageView para mostrar el GIF
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // El usuario hizo clic en el botón "OK", cierra el diálogo
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 }

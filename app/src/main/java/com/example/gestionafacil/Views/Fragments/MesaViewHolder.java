@@ -32,6 +32,10 @@ public class MesaViewHolder extends RecyclerView.ViewHolder {
 
     }
 
+    public void bind(Mesa mesa) {
+        checkBoxSeleccionada.setChecked(mesa.isChecked()); // Establecer el estado del checkbox
+    }
+
     void bindMozosAdapter(MozosAdapter mozosAdapter) {
         recyclerViewMozos.setAdapter(mozosAdapter);
     }

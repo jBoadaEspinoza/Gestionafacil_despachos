@@ -1,5 +1,6 @@
 <!-- detalle_despacho_fragment.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -23,7 +24,8 @@
             android:contentDescription="Botón Back"
             android:adjustViewBounds="true"
             android:maxWidth="30dp"
-            android:maxHeight="30dp"/>
+            android:maxHeight="30dp"
+            app:tint="@color/red"/>
 
         <!-- Título del fragmento -->
         <TextView
@@ -58,21 +60,31 @@
 
     </LinearLayout>
 
-    <!-- RecyclerView para mostrar las mesas -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMesas"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnDespachar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/red"
-        android:padding="16dp"
-        android:text="Despachar"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp" />
+        <!-- RecyclerView para mostrar las mesas -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewMesas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"/>
+
+
+        <Button
+            android:id="@+id/btnDespachar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:background="@color/red"
+            android:text="Despachar"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+    </FrameLayout>
+
+
+
 </LinearLayout>

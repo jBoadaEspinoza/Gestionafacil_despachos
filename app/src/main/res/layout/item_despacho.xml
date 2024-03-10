@@ -11,7 +11,7 @@
     <!-- Contenedor horizontal para el establecimiento y la cantidad -->
     <TextView
         android:id="@+id/textViewTitulo"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:textColor="@android:color/black"
