@@ -1,5 +1,6 @@
 package com.example.gestionafacil.Views.Fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -25,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.content.Context;
@@ -32,6 +34,7 @@ import android.content.Context;
 import androidx.annotation.Nullable;
 
 import com.example.gestionafacil.Controllers.AreasDespachoController;
+import com.example.gestionafacil.Controllers.BuscarController;
 import com.example.gestionafacil.Controllers.DespachosController;
 import com.example.gestionafacil.Controllers.UsuarioController;
 import com.example.gestionafacil.Models.AreaDespacho;
@@ -53,6 +56,8 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
     private RecyclerView recyclerView;
     private DespachosAdapter adapter;
     private DespachosController despachoController;
+    private BuscarController buscarController;
+
     private SesionUsuario sessionManager;
     private DrawerLayout drawerLayout;
     private List<Despacho> listdespachos;
@@ -67,6 +72,25 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
         View rootView = inflater.inflate(R.layout.fragment_despachos, container, false);
         recyclerView = rootView.findViewById(R.id.recyclerDespachos);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Obtener una referencia al SearchView
+        SearchView searchView = rootView.findViewById(R.id.searchView);
+
+        // Configurar el listener para el cambio en el texto de búsqueda
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Realizar la búsqueda cuando se envíe el texto de búsqueda (pulsar el botón Enter)
+                buscarDespachos(query);
+                return true; // Devolver true para indicar que la acción fue manejada
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // No realizar la búsqueda en tiempo real mientras se cambia el texto de búsqueda
+                return false; // Devolver false para indicar que no se maneja la acción
+            }
+        });
 
         // Obtener el DrawerLayout desde la actividad principal
         drawerLayout = getActivity().findViewById(R.id.drawer_layout);
@@ -93,6 +117,9 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
         });
 
 
+
+
+
         return rootView;
     }
 
@@ -108,7 +135,33 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
         sessionManager = new SesionUsuario(requireContext());
         obtenerDespachos();
     }
+    private void buscarDespachos(String query) {
+        String e_id = String.valueOf(sessionManager.getEstablishmentId());
+        String token = sessionManager.getToken();
+        String operacion = "ordenes_pendientes";
+        String aDenominacion = query; // Utiliza el texto de búsqueda como la denominación del área
 
+        // Realizar la búsqueda utilizando el BuscarController
+        BuscarController buscarController = new BuscarController(requireContext());
+        buscarController.buscarDespachos(operacion, e_id, token, aDenominacion, new BuscarController.DespachoCallback() {
+            @Override
+            public void onDespachosLoaded(List<Despacho> despachos) {
+                // Manejar la carga de los despachos encontrados
+                if (despachos.isEmpty()) {
+                    // Si la lista de despachos está vacía, mostrar un diálogo
+                    mostrarDialogoSinResultados();
+                } else {
+                    adapter.setDespachos(despachos);
+                }
+            }
+
+            @Override
+            public void onDespachosLoadFailed(String errorMessage) {
+                // Manejar el error al cargar los despachos
+                Toast.makeText(requireContext(), "Error al buscar despachos: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void obtenerDespachos() {
         listdespachos = new ArrayList<>();
         String e_id = String.valueOf(sessionManager.getEstablishmentId());
@@ -138,7 +191,19 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
             }
         });
     }
-
+    private void mostrarDialogoSinResultados() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Sin resultados")
+                .setMessage("No se encontraron despachos que coincidan con la búsqueda.")
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // No hacer nada, simplemente cerrar el diálogo
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();

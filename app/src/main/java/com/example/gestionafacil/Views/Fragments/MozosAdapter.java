@@ -37,13 +37,7 @@ public class MozosAdapter extends RecyclerView.Adapter<MozoViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull MozoViewHolder holder, int position) {
         Mozo mozo = mozoList.get(position);
-        holder.textViewNumOrder.setText("#" + (position + 1) + " ");
-        String nombreCompleto = mozo.getMozo_nombre();
-        String[] partesNombre = nombreCompleto.split(" ");
-        String primerNombre = partesNombre[0];
-        holder.textViewMozoNombre.setText(primerNombre);
-        holder.textViewOrderTime.setText(mozo.tiempoTranscurrido());
-        holder.bind(mozo);
+        holder.bind(mozo, position);
         holder.checkBoxSeleccionado.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 if (!mozosSeleccionados.contains(mozo)) {

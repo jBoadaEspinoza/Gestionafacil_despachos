@@ -34,4 +34,12 @@ public interface DespachoService {
     Call<JsonObject> DespacharPedido(
             @Body JsonObject requestBody
     );
+
+    @GET("control-de-despachos/")
+    Call<JsonObject> buscarDespacho(
+            @Query("operacion") String operacion,
+            @Query("e_id") String e_id,
+            @Query("token") String token,
+            @Query("a_denominacion") String a_denominacion
+    );
 }

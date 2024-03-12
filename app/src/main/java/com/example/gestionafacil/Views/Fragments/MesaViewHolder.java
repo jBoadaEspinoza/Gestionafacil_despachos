@@ -1,12 +1,14 @@
 package com.example.gestionafacil.Views.Fragments;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gestionafacil.Models.GrupoMesa;
 import com.example.gestionafacil.Models.Mesa;
 import com.example.gestionafacil.Models.Mozo;
 import com.example.gestionafacil.R;
@@ -30,14 +32,13 @@ public class MesaViewHolder extends RecyclerView.ViewHolder {
 
         recyclerViewMozos = itemView.findViewById(R.id.recyclerViewMozos);
 
+
+
     }
 
     public void bind(Mesa mesa) {
-        checkBoxSeleccionada.setChecked(mesa.isChecked()); // Establecer el estado del checkbox
-    }
-
-    void bindMozosAdapter(MozosAdapter mozosAdapter) {
-        recyclerViewMozos.setAdapter(mozosAdapter);
+        textViewMesaDenominacion.setText(mesa.getMesa_denominacion());
+        textViewCantidadMesas.setText(mesa.getCantidad());
     }
 
     void showMozos(boolean show) {

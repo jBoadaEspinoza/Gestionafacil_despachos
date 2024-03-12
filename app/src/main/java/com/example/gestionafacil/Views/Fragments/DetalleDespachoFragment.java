@@ -83,6 +83,8 @@ public class DetalleDespachoFragment extends Fragment {
         textViewTituloFragment.setText(titulo);
 
 
+
+
         // Configurar el clic del botón de retroceso
         ImageView btnBack = rootView.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +110,9 @@ public class DetalleDespachoFragment extends Fragment {
         obtenerMesas();
         // Configurar el clic del botón de despachar
         Button btnDespachar = rootView.findViewById(R.id.btnDespachar);
+
+        mesasAdapter.setBtnDespachar(btnDespachar);
+
         btnDespachar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,31 +136,40 @@ public class DetalleDespachoFragment extends Fragment {
                 }else{
                     mostrarAlertaVacio(getContext());
                 }
-                //despacharPedidos(idsMozos, token);
+                despacharPedidos(idsMozos, token);
             }
         });
 
         // Obtener referencia al CheckBox "Todos"
         CheckBox checkBoxTodos = rootView.findViewById(R.id.checkboxGlobal);
         // Agregar un listener al CheckBox "Todos"
-        checkBoxTodos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mesasAdapter.setCheckBoxGlobal(checkBoxTodos);
+        // Configurar el listener para el CheckBox global
+        checkBoxTodos.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // Si el checkbox global está marcado
+            public void onClick(View v) {
+                // Verificar si el CheckBox "Todos" está marcado
+                boolean isChecked = checkBoxTodos.isChecked();
+                // Marcar todos los elementos si el CheckBox "Todos" está marcado, de lo contrario, desmarcarlos
                 if (isChecked) {
-                    mesasAdapter.selectAllItems();
+                    mesasAdapter.selectAllItems();; // Llamar al método para marcar todos los checkboxes
                 } else {
-                    checkBoxTodos.setChecked(false);
+                    // Desmarcar todos los elementos
+                    mesasAdapter.deselectAllItems();
                 }
             }
         });
-        mesasAdapter.setCheckBoxGlobal(checkBoxTodos);
 
-
-
+        // Verificar si todos los elementos ya están seleccionados para marcar el checkbox global
+// Verificar si se han seleccionado todos los elementos manualmente
 
         return rootView;
     }
+
+
+
+
+
     private void obtenerMesas() {
         // Aquí obtienes las mesas y actualizas el adaptador
         MesasController mesasController = new MesasController(requireContext());

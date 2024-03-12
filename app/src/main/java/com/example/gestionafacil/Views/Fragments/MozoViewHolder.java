@@ -25,7 +25,13 @@ public class MozoViewHolder extends RecyclerView.ViewHolder {
         checkBoxSeleccionado = itemView.findViewById(R.id.checkBoxSeleccionado);
     }
 
-    public void bind(Mozo mozo) {
+    public void bind(Mozo mozo, int position) {
+        textViewNumOrder.setText("#" + (position + 1) + " ");
+        String nombreCompleto = mozo.getMozo_nombre();
+        String[] partesNombre = nombreCompleto.split(" ");
+        String primerNombre = partesNombre[0];
+        textViewMozoNombre.setText(primerNombre);
+        textViewOrderTime.setText(mozo.tiempoTranscurrido());
         checkBoxSeleccionado.setChecked(mozo.isChecked()); // Establecer el estado del checkbox
     }
 
