@@ -1,4 +1,4 @@
-package com.example.gestionafacil.Views.Fragments;
+package com.example.gestionafacil.Views.Fragments.Holders;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -21,7 +21,7 @@ public class MesaViewHolder extends RecyclerView.ViewHolder {
     public CheckBox checkBoxSeleccionada;
     public TextView textViewCantidadMesas;
     public ImageView btnDropdown;
-    RecyclerView recyclerViewMozos;
+    public RecyclerView recyclerViewMozos;
 
     public MesaViewHolder(View itemView) {
         super(itemView);
@@ -41,7 +41,7 @@ public class MesaViewHolder extends RecyclerView.ViewHolder {
         textViewCantidadMesas.setText(mesa.getCantidad());
     }
 
-    void showMozos(boolean show) {
+    public void showMozos(boolean show) {
         if (show) {
             recyclerViewMozos.setVisibility(View.VISIBLE);
         } else {

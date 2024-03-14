@@ -1,4 +1,4 @@
-package com.example.gestionafacil.Views.Fragments;
+package com.example.gestionafacil.Views.Fragments.Holders;
 
 import android.view.View;
 import android.widget.CheckBox;

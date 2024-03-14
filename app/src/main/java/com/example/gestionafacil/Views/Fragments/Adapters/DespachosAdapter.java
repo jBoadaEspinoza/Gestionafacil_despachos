@@ -1,4 +1,4 @@
-package com.example.gestionafacil.Views.Fragments;
+package com.example.gestionafacil.Views.Fragments.Adapters;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

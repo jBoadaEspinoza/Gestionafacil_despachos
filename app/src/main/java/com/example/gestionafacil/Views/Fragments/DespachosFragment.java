@@ -17,31 +17,31 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import androidx.appcompat.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Context;
 
 import androidx.annotation.Nullable;
 
 import com.example.gestionafacil.Controllers.AreasDespachoController;
 import com.example.gestionafacil.Controllers.BuscarController;
 import com.example.gestionafacil.Controllers.DespachosController;
-import com.example.gestionafacil.Controllers.UsuarioController;
 import com.example.gestionafacil.Models.AreaDespacho;
 import com.example.gestionafacil.Models.Despacho;
 import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.R;
 import com.example.gestionafacil.Views.Activities.LoginActivity;
+import com.example.gestionafacil.Views.Fragments.Adapters.DespachosAdapter;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -87,8 +87,13 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // No realizar la búsqueda en tiempo real mientras se cambia el texto de búsqueda
-                return false; // Devolver false para indicar que no se maneja la acción
+                if (!newText.isEmpty() && newText.length() >= 3) {
+                    buscarDespachos(newText);
+                } else {
+                    mostrarTextoSinResultados(false);
+                    obtenerDespachos();
+                }
+                return true; // Devolver false para indicar que no se maneja la acción
             }
         });
 
@@ -147,11 +152,12 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
             @Override
             public void onDespachosLoaded(List<Despacho> despachos) {
                 // Manejar la carga de los despachos encontrados
-                if (despachos.isEmpty()) {
+                  if (despachos.isEmpty()) {
                     // Si la lista de despachos está vacía, mostrar un diálogo
-                    mostrarDialogoSinResultados();
+                      mostrarTextoSinResultados(true);
                 } else {
                     adapter.setDespachos(despachos);
+                      mostrarTextoSinResultados(false);
                 }
             }
 
@@ -191,19 +197,22 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
             }
         });
     }
-    private void mostrarDialogoSinResultados() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Sin resultados")
-                .setMessage("No se encontraron despachos que coincidan con la búsqueda.")
-                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // No hacer nada, simplemente cerrar el diálogo
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+
+    private void mostrarTextoSinResultados(boolean mostrar) {
+        TextView textoNoResultados = requireView().findViewById(R.id.textNoResults);
+        RecyclerView recyclerDespachos = requireView().findViewById(R.id.recyclerDespachos);
+
+        if (mostrar) {
+            textoNoResultados.setVisibility(View.VISIBLE);
+            textoNoResultados.bringToFront(); // Trae el texto al frente para que se muestre encima de todo
+            textoNoResultados.setGravity(Gravity.CENTER); // Centra el texto horizontalmente
+            recyclerDespachos.setVisibility(View.GONE);
+        } else {
+            textoNoResultados.setVisibility(View.GONE);
+            recyclerDespachos.setVisibility(View.VISIBLE);
+        }
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();

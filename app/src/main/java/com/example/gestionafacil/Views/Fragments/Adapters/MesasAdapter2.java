@@ -1,4 +1,4 @@
-package com.example.gestionafacil.Views.Fragments;
+package com.example.gestionafacil.Views.Fragments.Adapters;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gestionafacil.Models.GrupoMesa;
-import com.example.gestionafacil.Models.Mesa;
 import com.example.gestionafacil.Models.Mozo;
 import com.example.gestionafacil.R;
+import com.example.gestionafacil.Views.Fragments.Holders.MesaViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;

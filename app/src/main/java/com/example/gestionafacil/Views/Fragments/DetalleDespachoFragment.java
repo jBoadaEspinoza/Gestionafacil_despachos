@@ -2,27 +2,21 @@ package com.example.gestionafacil.Views.Fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.content.Context;
 
 import com.bumptech.glide.Glide;
@@ -35,6 +29,7 @@ import com.example.gestionafacil.Models.Mozo;
 import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.R;
 import com.example.gestionafacil.Views.DespachoDialog;
+import com.example.gestionafacil.Views.Fragments.Adapters.MesasAdapter2;
 import com.example.gestionafacil.Views.MainActivity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

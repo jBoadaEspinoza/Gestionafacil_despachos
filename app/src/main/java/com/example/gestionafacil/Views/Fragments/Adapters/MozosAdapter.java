@@ -1,6 +1,5 @@
-package com.example.gestionafacil.Views.Fragments;
+package com.example.gestionafacil.Views.Fragments.Adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gestionafacil.Models.Mozo;
 import com.example.gestionafacil.R;
+import com.example.gestionafacil.Views.Fragments.Holders.MozoViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
