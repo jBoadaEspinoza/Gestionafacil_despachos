@@ -60,30 +60,25 @@
 
     </LinearLayout>
 
-    <FrameLayout
+    <!-- RecyclerView para mostrar las mesas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMesas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
 
-        <!-- RecyclerView para mostrar las mesas -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewMesas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"/>
-
-
-        <Button
-            android:id="@+id/btnDespachar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:background="@color/red"
-            android:text="Despachar"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
-    </FrameLayout>
+    <Button
+        android:id="@+id/btnDespachar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:background="@color/red"
+        android:text="Despachar"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
 
 
 

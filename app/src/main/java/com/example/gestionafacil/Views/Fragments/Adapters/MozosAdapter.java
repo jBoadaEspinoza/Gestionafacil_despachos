@@ -42,14 +42,15 @@ public class MozosAdapter extends RecyclerView.Adapter<MozoViewHolder>{
             if (isChecked) {
                 if (!mozosSeleccionados.contains(mozo)) {
                     mozosSeleccionados.add(mozo); // Agregar el mozo a la lista de mozos seleccionados si no está presente
-                    mozo.setChecked(isChecked);                    listener.onMozoCheckedChanged(mozosSeleccionados.size());
+                    mozo.setChecked(isChecked);
+                    listener.onMozoCheckedChanged(mozo);
                     listener.onMozosListChanged(mozo);
                 }
             } else {
                 mozo.setChecked(false);
                 mozosSeleccionados.remove(mozo); // Quitar el mozo de la lista de mozos seleccionados
                 // Notificar deselección
-                listener.onMozoCheckedChanged(mozosSeleccionados.size());
+                listener.onMozoCheckedChanged(mozo);
                 // Notificar para borrar el mozo de la otra lista
                 listener.onMozoRemoved(mozo);
             }
@@ -62,7 +63,7 @@ public class MozosAdapter extends RecyclerView.Adapter<MozoViewHolder>{
     }
 
     public interface OnMozoCheckedChangeListener {
-        void onMozoCheckedChanged(int selectedCount);
+        void onMozoCheckedChanged(Mozo mozo);
         void onMozosListChanged(Mozo mozo);
         void onMozoRemoved(Mozo mozo);
 

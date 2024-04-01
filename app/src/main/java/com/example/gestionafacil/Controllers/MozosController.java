@@ -1,6 +1,9 @@
 package com.example.gestionafacil.Controllers;
 
+import android.content.Context;
+
 import com.example.gestionafacil.Models.Mozo;
+import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.services.DespachoService;
 import com.example.gestionafacil.services.RetrofitClient;
 import com.google.gson.Gson;
@@ -18,10 +21,15 @@ import retrofit2.Response;
 public class MozosController {
 
     private DespachoService service;
+    private SesionUsuario sessionUsuario; // Instancia de la clase SesionUsuario
+    private Context context;
 
-    public MozosController() {
 
+    public MozosController(Context context) {
+        this.context = context;
         service = RetrofitClient.getClient().create(DespachoService.class);
+        sessionUsuario = new SesionUsuario(context);
+
     }
 
     public void obtenerMozos(String operacion, String eId, String mId, String token, final MozosCallback callback) {
@@ -37,6 +45,12 @@ public class MozosController {
                         List<Mozo> mozos = procesarDatos(responseBody);
                         callback.onMozosLoaded(mozos);
                     } else {
+                        if (responseObj.has("msg") && responseObj.get("msg").getAsString().equals("Token expirado")) {
+                            // Borrar el token de la sesión si el mensaje indica que el token ha expirado
+                            sessionUsuario.logout();
+                            // Mostrar el diálogo de token expirado
+                            sessionUsuario.mostrarDialogoTokenExpirado(context);
+                        }
                         callback.onMozosLoadFailed("La solicitud no tuvo éxito. Código de estado HTTP: " + response.code());
                     }
                 } else {

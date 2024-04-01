@@ -36,6 +36,7 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -115,7 +116,7 @@ public class DetalleDespachoFragment extends Fragment {
                 mesasAdapter.imprimirMozosAgregados();
 
                 // Obtener los mozos seleccionados del adaptador
-                List<Mozo> mozosSeleccionados = mesasAdapter.getMozosAgregados();
+                Set<Mozo> mozosSeleccionados = mesasAdapter.getMozosAgregados();
 
                 // Crear un JsonArray para almacenar los IDs de los mozos seleccionados
                 JsonArray idsMozos = new JsonArray();
@@ -192,7 +193,7 @@ public class DetalleDespachoFragment extends Fragment {
     }
     private void obtenerMozos(String operacion, String aId, String mId, String token) {
         // Aquí obtienes los mozos y los agregas al grupo de mesa correspondiente
-        MozosController mozosController = new MozosController();
+        MozosController mozosController = new MozosController(getContext());
         mozosController.obtenerMozos(operacion, aId, mId, token, new MozosController.MozosCallback() {
             @Override
             public void onMozosLoaded(List<Mozo> mozos) {

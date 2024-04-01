@@ -18,11 +18,14 @@ import com.example.gestionafacil.R;
 import com.example.gestionafacil.Views.Fragments.Holders.MesaViewHolder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MesasAdapter2 extends RecyclerView.Adapter<MesaViewHolder>{
     private List<GrupoMesa> mesaList;
-    private List<Mozo> mozosAgregados = new ArrayList<>();
+    public Set<Mozo> mozosAgregados = new HashSet<>();
+
     private CheckBox checkBoxGlobal;
     private boolean onBind;
     private Button btnDespachar;
@@ -44,7 +47,7 @@ public class MesasAdapter2 extends RecyclerView.Adapter<MesaViewHolder>{
     }
 
 
-    public List<Mozo> getMozosAgregados() {
+    public Set<Mozo> getMozosAgregados() {
         return mozosAgregados;
     }
     @NonNull
@@ -64,15 +67,29 @@ public class MesasAdapter2 extends RecyclerView.Adapter<MesaViewHolder>{
         onBind = true;
         holder.checkBoxSeleccionada.setChecked(grupoMesa.getMesa().isChecked());
         onBind = false;
+
+        if (areAllMesasSelected()) {
+            checkBoxGlobal.setChecked(true);
+        } else {
+            checkBoxGlobal.setChecked(false);
+        }
+
         holder.checkBoxSeleccionada.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!onBind){
                     // Actualizar el estado de selección de la mesa y de todos sus mozos asociados
                     if (isChecked) {
-                        grupoMesa.getMesa().setChecked(true);
                         mozosAgregados.addAll(grupoMesa.getMozos());
                         updateMozosCheckboxes(grupoMesa, true);
+                        grupoMesa.getMesa().setChecked(isChecked);
+                        if (areAllMesasSelected()) {
+                            checkBoxGlobal.setChecked(true);
+                        } else {
+                            checkBoxGlobal.setChecked(false);
+                        }
+                        updateBtnDespacharText();
+
                     } else {
                         // Verificar si todos los mozos ya están marcados
                         boolean allMozosChecked = true;
@@ -82,6 +99,13 @@ public class MesasAdapter2 extends RecyclerView.Adapter<MesaViewHolder>{
                                 break;
                             }
                         }
+
+                        if (areAllMesasSelected()) {
+                            checkBoxGlobal.setChecked(true);
+                        } else {
+                            checkBoxGlobal.setChecked(false);
+                        }
+
                         // Si todos los mozos están marcados, desmarcar todo
                         if (allMozosChecked) {
                             // Desmarcar el checkbox de la mesa
@@ -92,8 +116,12 @@ public class MesasAdapter2 extends RecyclerView.Adapter<MesaViewHolder>{
                             }
                             mozosAgregados.removeAll(grupoMesa.getMozos());
                             // Notificar cambios en el adaptador
-                            notifyDataSetChanged();
+                            updateBtnDespacharText();
                         }
+
+
+                        notifyDataSetChanged();
+
                     }
                 }
 
@@ -103,29 +131,43 @@ public class MesasAdapter2 extends RecyclerView.Adapter<MesaViewHolder>{
         MozosAdapter mozoAdapter = new MozosAdapter(grupoMesa.getMozos(), new MozosAdapter.OnMozoCheckedChangeListener() {
 
             @Override
-            public void onMozoCheckedChanged(int selectedCount) {
-                Log.d("MesasAdapter2", "Mozos seleccionados: " + selectedCount);
-                // Verificar si no todos los elementos están seleccionados y actualizar el estado del checkbox global
+            public void onMozoCheckedChanged(Mozo mozo) {
+               mozosAgregados.add(mozo);
+
                 boolean allMozosChecked = areAllMozosChecked(grupoMesa);
-                holder.checkBoxSeleccionada.setChecked(allMozosChecked);
-                btnDespachar.setText("Despachar (" + mozosAgregados.size() + ")");
+                //holder.checkBoxSeleccionada.setChecked(allMozosChecked);
+                if (allMozosChecked) {
+                    grupoMesa.getMesa().setChecked(true);
+                } else {
+                    grupoMesa.getMesa().setChecked(false);
+                }
+
+                // Actualizar el estado del checkbox global
+                if (areAllMesasSelected()) {
+                    checkBoxGlobal.setChecked(true);
+                } else {
+                    checkBoxGlobal.setChecked(false);
+                }
+                updateBtnDespacharText();
+
+
+                notifyDataSetChanged();
+
             }
 
             @Override
             public void onMozosListChanged(Mozo mozo) {
                 Log.d("MesasAdapter2", "Mozo seleccionado:");
                 Log.d("MesasAdapter2", "ID: " + mozo.getId() + ", Nombre: " + mozo.getMozo_nombre());
-                mozosAgregados.add(mozo); // Agregar el mozo a la lista
             }
 
             @Override
             public void onMozoRemoved(Mozo mozo) {
                 mozosAgregados.remove(mozo); // Remover el mozo de la lista
-                // Verificar si el mozo eliminado estaba marcado
+                updateBtnDespacharText();
                 if (mozo.isChecked()) {
                     // Verificar si quedan más mozos marcados en la mesa
                     boolean anyMozosChecked = false;
-                    btnDespachar.setText("Despachar (" + mozosAgregados.size() + ")");
 
                     for (Mozo m : grupoMesa.getMozos()) {
                         if (m.isChecked()) {
@@ -135,11 +177,11 @@ public class MesasAdapter2 extends RecyclerView.Adapter<MesaViewHolder>{
                     }
                     // Desmarcar el CheckBox de la mesa solo si no quedan más mozos marcados
                     if (!anyMozosChecked) {
-                        btnDespachar.setText("Despachar (" + mozosAgregados.size() + ")");
-
                         holder.checkBoxSeleccionada.setChecked(false);
                         checkBoxGlobal.setChecked(false);
                     }
+                    updateBtnDespacharText();
+
                 }
             }
         });
@@ -236,6 +278,18 @@ public class MesasAdapter2 extends RecyclerView.Adapter<MesaViewHolder>{
 
     }
 
-    // Método para verificar si todos los elementos están seleccionados
+
+    public boolean areAllMesasSelected() {
+        for (GrupoMesa grupoMesa : mesaList) {
+            if (!grupoMesa.getMesa().isChecked()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void updateBtnDespacharText() {
+        btnDespachar.setText("Despachar (" + mozosAgregados.size() + ")");
+    }
 
 }

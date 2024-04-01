@@ -42,6 +42,7 @@ import com.example.gestionafacil.Models.SesionUsuario;
 import com.example.gestionafacil.R;
 import com.example.gestionafacil.Views.Activities.LoginActivity;
 import com.example.gestionafacil.Views.Fragments.Adapters.DespachosAdapter;
+import com.example.gestionafacil.Views.MainActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -80,9 +81,12 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Realizar la búsqueda cuando se envíe el texto de búsqueda (pulsar el botón Enter)
-                buscarDespachos(query);
-                return true; // Devolver true para indicar que la acción fue manejada
+                if (query.isEmpty()) {
+                    obtenerDespachos(); // Llama al método para obtener todos los despachos
+                } else {
+                    buscarDespachos(query); // Realiza la búsqueda con el texto especificado
+                }
+                return true;
             }
 
             @Override
@@ -243,7 +247,6 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
                 if (id == R.id.menu_search_filters) {
                     // Acción para Filtros de Búsqueda
 
-                    Toast.makeText(requireContext(), "Filtros de Búsqueda seleccionados", Toast.LENGTH_SHORT).show();
                     showFilterOptionsDialog();
                     return true;
                 } else if (id == R.id.menu_help_feedback) {
@@ -355,4 +358,6 @@ public class DespachosFragment extends Fragment implements NavigationView.OnNavi
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+
 }
